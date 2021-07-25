@@ -1,3 +1,3 @@
-from romanos import a_romano
+from romanos import a_romano, a_numero
 
-a_romano(7)
+print(a_numero('IIII'))

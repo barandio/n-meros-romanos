@@ -12,10 +12,20 @@ digitos_romanos = {
 def a_numero(cadena):
     acumulador = 0
     valor_ant = 0
+    cuenta_repeticiones = 0
+    cuenta_restas = 0
     for caracter in cadena: 
-        valor = digitos_romanos[caracter]
-        if valor > valor_ant:
-            if valor_ant in (5, 50, 500) == 0:
+        valor = digitos_romanos.get(caracter)
+        if not valor:
+            raise ValueError("El mío")
+                
+        if valor_ant and valor > valor_ant:
+            if cuenta_restas > 0:
+                raise ValueError("No se puede realizar restas consecutivas")
+            if cuenta_repeticiones > 0:
+                raise ValueError("No se pueden hacer restas dentro de repeticiones")
+
+            if valor_ant in (5, 50, 500):
                 raise ValueError("No se puede restar V, L ni D")
 
             if valor_ant > 0 and valor > 10 * valor_ant:
@@ -23,8 +33,20 @@ def a_numero(cadena):
 
             acumulador = acumulador - valor_ant
             acumulador = acumulador + valor - valor_ant
+            cuenta_restas += 1
         else: 
             acumulador += valor
+            cuenta_restas = 0
+
+        if valor == valor_ant:
+            if valor in (5 ,50, 500):
+                raise ValueError("No se pueden repetir V, L o D")
+            cuenta_repeticiones +=1
+
+            if cuenta_repeticiones == 3:
+                raise ValueError("Demasiadas repeticiones de {}".format(caracter)) 
+        else:
+            cuenta_repeticiones = 0
 
         valor_ant = valor
         
@@ -47,7 +69,5 @@ def a_romano(n):
     decenas = int(c[-2])
     centenas = int(c[-3])
     millares = int(c[-4])
-
-    componentes = (millares, centenas, decenas, unidades)
 
     return simbolos['millares'][millares] + simbolos ['centenas'] [centenas] + simbolos ['decenas'] [decenas] + simbolos ['unidades'][unidades]
