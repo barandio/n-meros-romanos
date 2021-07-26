@@ -62,7 +62,6 @@ def validar(n):
 def a_romano(n):
 
     validar(n)
-
     c = "{:04d}".format(n)
 
     unidades = int(c[-1])
@@ -71,3 +70,5 @@ def a_romano(n):
     millares = int(c[-4])
 
     return simbolos['millares'][millares] + simbolos ['centenas'] [centenas] + simbolos ['decenas'] [decenas] + simbolos ['unidades'][unidades]
+
+
